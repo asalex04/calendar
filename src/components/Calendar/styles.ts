@@ -5,6 +5,8 @@ export const Main = styled.div`
   padding: 4px;
   max-width: 740px;
   background-color: #C2C2C2;
+  margin-left: auto;
+  margin-right: auto;
 `
 
 export const Panel = styled.div`
@@ -18,13 +20,12 @@ export const Panel = styled.div`
 export const GridWrapper = styled.div`
   display: grid;
   grid-template-areas:
-    'div days'
-    'hours grid'
-    'today today';
-  grid-template-columns: 1fr 8fr;
-  grid-template-rows: 2fr 8fr 2fr;
+    '. days days'
+    'hours grid grid'
+    'today . delete';
+  grid-template-columns: 1fr 8fr 1fr;
   grid-template-rows: 2fr 8fr 1fr;
-  background: #d3d9cd;
+  background: #C2C2C2;
 `
 
 export const Days = styled.div`
@@ -48,7 +49,8 @@ export const Month = styled.div`
 
 export const Sign = styled.div`
   font-size: 24px;
-  color: #FF3131;
+  color: #FF3030;
+  cursor: pointer;
 `
 
 export const Grid = styled.div`
@@ -70,7 +72,22 @@ export const Hours = styled.div`
 export const Today = styled.div`
   display: grid;
   grid-area: today;
-  color: #FF3131;
+  color: #FF3030;
   align-items: center;
   padding-left: 20px;
+`
+export const Delete = styled.div<{primary: boolean}>`
+  display: grid;
+  grid-area: delete;
+  color: ${({ primary }) => primary ? '#FF3030' : '#C2C2C2'};
+  align-items: center;
+  padding-right: 20px;
+`
+export const Day = styled.div`
+  width: 1.5em;
+  height: 1.5em;
+  color: #FFFFFF;
+  background: #FF3030;
+  border-radius: 50%;
+  text-align: center;
 `

@@ -5,8 +5,7 @@ export const Week = () => {
     const daysOfWeek = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
     moment.updateLocale('en', {week: {dow: 1}})
-    const startWeek = moment().startOf('week')
-    const endWeek = moment().endOf('week')
+
     const week: string[] = []
 
     let i = 0

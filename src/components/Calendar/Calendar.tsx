@@ -1,75 +1,32 @@
 import React, {useState} from 'react';
 import {
-    Main, GridWrapper, Panel, Sign, GridRow,
-    Days, Month, Grid, Hours, Today
+    Main, GridWrapper, Panel, Sign, GridRow, Day,
+    Days, Month, Grid, Hours, Today, Delete
 } from "./styles";
+import './styles.css'
 import {Week} from "../../utils/Week";
 import moment from "moment";
-import {Button, Form, Modal} from "react-bootstrap";
+import AddEvent from "../AddEvent/AddEvent";
 
 const [week, daysOfWeek] = Week()
+const currentDay = moment().format('DD').toString()
 const listOfHour = Array.from(Array(11).keys()).map(n => n + 10)
-const Cells = Array.from(Array(91))
-
-function addEvent() {
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-    return (
-        <>
-            <Button variant="primary" onClick={handleShow}>
-                Launch demo modal
-            </Button>
-
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Email address</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="name@example.com"
-                                autoFocus
-                            />
-                        </Form.Group>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlTextarea1"
-                        >
-                            <Form.Label>Example textarea</Form.Label>
-                            <Form.Control as="textarea" rows={3} />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </>
-    );
-}
-
-// const addEvent = () => {
-//     Example()
-// }
+const Cells = Array.from(Array(91).keys())
 
 const Calendar = () => {
+    const [isShow, setIsShow] = useState(false)
+
+    const addButton = (e: React.MouseEvent) => {
+        e.currentTarget.classList.add("active")
+        setIsShow(true)
+    }
+
     return (
         <Main>
             <Panel>
                 <div>Interview Calendar</div>
                 <Sign>
-
+                    <AddEvent />
                 </Sign>
             </Panel>
             <GridWrapper>
@@ -81,7 +38,7 @@ const Calendar = () => {
                     </GridRow>
                     <GridRow>
                         {week.map(day => (
-                            <div>{day}</div>
+                            day === currentDay ? <Day>{day}</Day> : <div>{day}</div>
                         ))}
                     </GridRow>
                     <Month>
@@ -93,17 +50,15 @@ const Calendar = () => {
                 <Hours>
                     <div>09:00</div>
                     {listOfHour.map(hour => (
-                        <div>{`${hour}:00`}</div>))}
+                        <div key={hour}>{`${hour}:00`}</div>))}
                 </Hours>
                 <Grid>
                     {Cells.map(cell => (
-                        <div style={{
-                            background: "white",
-                            padding: 14
-                        }}></div>
+                        <div className='cell' onClick={(e) => addButton(e)}/>
                     ))}
                 </Grid>
                 <Today>Today</Today>
+                <Delete primary={isShow}>Delete</Delete>
             </GridWrapper>
         </Main>
     );
