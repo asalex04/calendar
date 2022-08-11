@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {Sign} from "../Calendar/styles";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import styled from "styled-components";
+import {useAppDispatch, useAppSelector} from "../../hooks/redux";
+import {removeData, setData} from "../../store/reducers/dataSlice";
 
 const Main = styled.main`
   background: #E6E6E6;
@@ -10,9 +12,22 @@ const Main = styled.main`
 
 const AddEvent = () => {
     const [show, setShow] = useState(false);
+    const [event, setEvent] = useState('');
+    const {id, setOfData} = useAppSelector(state => state.data)
+    const dispatch = useAppDispatch()
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const addEvent = () => {
+        const oldEvent = setOfData.find(el => el.id === id)
+        if (oldEvent) {
+            dispatch(removeData(id))
+        }
+        dispatch(setData({id, event}))
+        setEvent('')
+        handleClose()
+    }
 
     return (
         <>
@@ -29,6 +44,8 @@ const AddEvent = () => {
                             <Form.Control
                                 type="text"
                                 autoFocus
+                                value={event}
+                                onChange={e => setEvent(e.target.value)}
                             />
                         </Form.Group>
                     </Form>
@@ -40,7 +57,7 @@ const AddEvent = () => {
                         <Button variant="outline-primary" size="lg" onClick={handleClose}>
                             Cancel
                         </Button>
-                        <Button variant="outline-primary" size="lg" onClick={handleClose}>
+                        <Button variant="outline-primary" size="lg" onClick={() => addEvent()}>
                             OK
                         </Button>
                     </Modal.Footer></Main>

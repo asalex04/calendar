@@ -7,6 +7,8 @@ import './styles.css'
 import {Week} from "../../utils/Week";
 import moment from "moment";
 import AddEvent from "../AddEvent/AddEvent";
+import {useAppDispatch, useAppSelector} from "../../hooks/redux";
+import {removeData, setID} from "../../store/reducers/dataSlice";
 
 const [week, daysOfWeek] = Week()
 const currentDay = moment().format('DD').toString()
@@ -15,10 +17,30 @@ const Cells = Array.from(Array(91).keys())
 
 const Calendar = () => {
     const [isShow, setIsShow] = useState(false)
+    const [id, setId] = useState(0)
+    const dispatch = useAppDispatch()
+    const {setOfData} = useAppSelector(state => state.data)
 
-    const addButton = (e: React.MouseEvent) => {
-        e.currentTarget.classList.add("active")
-        setIsShow(true)
+    const addEvent = (e: React.MouseEvent, id: number) => {
+        setId(id)
+        dispatch(setID(id))
+        const element = e.currentTarget
+        if (element.classList.contains('selected')) {
+            alert((setOfData.find(i => i.id === id) || setOfData[0]).event)
+        } else {
+            const active = document.querySelector('.active')
+            active && active.classList.remove('active')
+            element.classList.add("selected")
+            element.classList.add("active")
+            setIsShow(true)
+        }
+    }
+
+    const removeEvent = () => {
+        const elem = document.getElementById(String(id))
+        elem && elem.classList.remove("selected")
+        dispatch(removeData(id))
+        setIsShow(false)
     }
 
     return (
@@ -26,7 +48,7 @@ const Calendar = () => {
             <Panel>
                 <div>Interview Calendar</div>
                 <Sign>
-                    <AddEvent />
+                    <AddEvent/>
                 </Sign>
             </Panel>
             <GridWrapper>
@@ -53,12 +75,12 @@ const Calendar = () => {
                         <div key={hour}>{`${hour}:00`}</div>))}
                 </Hours>
                 <Grid>
-                    {Cells.map(cell => (
-                        <div className='cell' onClick={(e) => addButton(e)}/>
+                    {Cells.map((cell, id) => (
+                        <div key={id} id={id.toString()} className='cell' onClick={(e) => addEvent(e, id)}/>
                     ))}
                 </Grid>
                 <Today>Today</Today>
-                <Delete primary={isShow}>Delete</Delete>
+                <Delete primary={isShow} onClick={() => removeEvent()}>Delete</Delete>
             </GridWrapper>
         </Main>
     );

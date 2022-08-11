@@ -1,6 +1,11 @@
 .cell {
     background: #FFFFFF;
 }
+.selected {
+    background-color: #C2C2C2;
+    border: 1px #FFFFFF solid;
+}
 .active {
-    background: #C2C2C2;
+    background-color: #0164fd;
+    border: 1px #FFFFFF solid;
 }

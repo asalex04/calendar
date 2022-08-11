@@ -82,6 +82,7 @@ export const Delete = styled.div<{primary: boolean}>`
   color: ${({ primary }) => primary ? '#FF3030' : '#C2C2C2'};
   align-items: center;
   padding-right: 20px;
+  cursor: pointer;
 `
 export const Day = styled.div`
   width: 1.5em;
