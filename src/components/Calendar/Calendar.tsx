@@ -26,19 +26,19 @@ const Calendar = () => {
         dispatch(setID(id))
         const element = e.currentTarget
         if (element.classList.contains('selected')) {
-            alert((setOfData.find(i => i.id === id) || setOfData[0]).event)
-        } else {
-            const active = document.querySelector('.active')
-            active && active.classList.remove('active')
-            element.classList.add("selected")
-            element.classList.add("active")
-            setIsShow(true)
+            const event = setOfData.find(i => i.id === id)
+            event ? alert(event.event) : alert('event not exist')
         }
+        const active = document.querySelector('.active')
+        active && active.classList.remove('active')
+        element.classList.add("selected")
+        element.classList.add("active")
+        setIsShow(true)
     }
 
     const removeEvent = () => {
         const elem = document.getElementById(String(id))
-        elem && elem.classList.remove("selected")
+        elem && elem.classList.remove("selected", 'active')
         dispatch(removeData(id))
         setIsShow(false)
     }
@@ -54,13 +54,13 @@ const Calendar = () => {
             <GridWrapper>
                 <Days>
                     <GridRow>
-                        {daysOfWeek.map(day => (
-                            <div style={{fontSize: 12}}>{day}</div>
+                        {daysOfWeek.map((day, id) => (
+                            <div key={id} style={{fontSize: 12}}>{day}</div>
                         ))}
                     </GridRow>
                     <GridRow>
-                        {week.map(day => (
-                            day === currentDay ? <Day>{day}</Day> : <div>{day}</div>
+                        {week.map((day, id) => (
+                            day === currentDay ? <Day key={id}>{day}</Day> : <div key={id}>{day}</div>
                         ))}
                     </GridRow>
                     <Month>
